@@ -7,7 +7,6 @@ if ($dayOfWeek == 6 || $dayOfWeek == 7) {
 }
 
 $dayOffset = $dayOfWeek-1;
-$dayOffset = 4;
 
 function anantasea() {
     // anantasea could follow suit of natureza (strip tags, lots of greps)
@@ -49,7 +48,6 @@ function natureza() {
 }
 
 function profdum() {
-    return '';
     /* Zomato requires API key, so here it is. This is actually quite sane were it not for the auth key
      * complications and the 1000 requests per day limits.
      * -zouharvi 23 Aug 2019
@@ -96,13 +94,24 @@ function ferdinanda() {
     return $mainClean;
 }
 
-$places = array('anantasea', 'natureza', 'profdum', 'ferdinanda');
+$places = array(
+    'anantasea' => 'Anantasea',
+    'natureza' => 'Natureza',
+    'profdum' => 'Profesní dům',
+    'ferdinanda' => 'Ferdinanda'
+);
 $response = array();
-foreach($places as $place) {
-    $menu = $place();
-    array_push($response, $menu);
+foreach($places as $place => $fullname) {
+    try {
+        $menu = $place();
+    } catch(Exception $e) {
+        $menu = 'Not available';
+    }
+    $response[$place] = array(
+        'name' => $fullname,
+        'menu' => $menu,
+    );
 } 
 
-print_r($response);
 //echo(json_encode($response));
 ?>
