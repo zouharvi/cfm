@@ -72,10 +72,11 @@ function profdum() {
     $menu = $menu[0]->daily_menu->dishes;
     $dishes = array();
     foreach($menu as $dish) {
-        array_push($dishes, $dish->dish->name);  
+        $food = $dish->dish->name;
+        $food = preg_replace('/\d\d+/', '', $food);
+        array_push($dishes, $food);  
     }
-    print_r($dishes);
-    return $dishes;
+    return implode("\n", $dishes);
 }
 
 function ferdinanda() {
