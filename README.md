@@ -10,8 +10,8 @@ CfM fetches daily menus of places we usually frequent. This page saves me about 
 #### I want to add a new place.
 Either create a pull request or email me.
 
-#### Most of the requests will break some day in the future!
-Yes.
-
 #### The code is absolute garbage!
 Yes.
+
+#### It looks weird on my phone.
+It's 2019. I'd be surprised if something actually rendered correctly.
