@@ -8,7 +8,7 @@ CfM fetches daily menus of places we usually frequent. This page saves me about 
 
 ## FAQ
 #### I want to add a new place.
-Either create a pull request or email me.
+Either open a pull request or email me.
 
 #### The code is absolute garbage!
 Yes.

@@ -1,11 +1,8 @@
 <?php
 
 $dayOfWeek = date('w');
-
-if ($dayOfWeek == 6 || $dayOfWeek == 7) {
-    die('[]');
-}
-
+$isWeekend = ($dayOfWeek > 5);
+$dayOfWeek = min($dayOfWeek, 5);
 $dayOffset = $dayOfWeek-1;
 
 function anantasea() {
@@ -114,5 +111,5 @@ foreach($places as $place => $fullname) {
     );
 } 
 
-//echo(json_encode($response));
+//print_r($response);
 ?>

@@ -10,6 +10,10 @@
     <h1>Call for Menza</h2>
     <?php
     include 'raw.php';
+    
+    if ($isWeekend) {
+        echo "<p>It's weekend now, so I'm showing last available lunch menus.</p>";
+    }
 
     foreach($response as $place) {
         echo '<h3>' . $place['name'] . '</h3>';
