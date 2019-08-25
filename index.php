@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400" media="all">
     <style>
         * { font-family: Roboto; }
+        a { color: black; text-decoration: none; }
     </style>
 </head>
 
@@ -16,13 +17,13 @@
     }
 
     foreach($response as $place) {
-        echo '<h3>' . $place['name'] . '</h3>';
+        echo '<h3><a href="' . $place['href'] . '">' . $place['name'] . '</a></h3>';
         $menu = $place['menu'];
         $menu = str_replace("\n", '<br>', $menu);
         echo '<p>' . $menu . '</p>';
     }
     ?>
 
-    <a href='https://github.com/zouharvi/cfm'>About</a>
+    <h5><a href='https://github.com/zouharvi/cfm'>About</a></h5>
 </body>
 </html>
