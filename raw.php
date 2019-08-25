@@ -135,6 +135,8 @@ function hamu() {
     return $menuClean;
 }
 
+include 'counter.php';
+
 $places = array(
     array(
         'func' => 'anantasea',
@@ -162,6 +164,7 @@ $places = array(
         'href' => 'https://www.hamu.cz/cs/vse-o-fakulte/fakultni-kavarna/',
     ),
 );
+
 $response = array();
 foreach($places as $placeArr) {
     try {
