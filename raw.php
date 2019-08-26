@@ -8,8 +8,8 @@ $dayOfWeek = (date('w')-1 + 7) % 7;
 $isWeekend = ($dayOfWeek > 5);
 $dayOfWeek = min($dayOfWeek, 4);
 
-function anantasea() {
-    // anantasea could follow suit of natureza (strip tags, lots of greps)
+function ananta() {
+    // ananta could follow suit of natureza (strip tags, lots of greps)
     global $dayOfWeek;
 
     $childIndex = array(1, 4, 7, 10, 13)[$dayOfWeek];
@@ -79,6 +79,43 @@ function profdum() {
     return implode("\n", $dishes);
 }
 
+function profdum_plain() {
+    // Broken for days other than mondays
+    global $dayOfWeek;
+    
+    $pageRaw = file_get_contents("http://www.ms.mff.cuni.cz/profdum/jidelnicek.htm");
+    $pageRaw = iconv('windows-1250', 'utf-8', $pageRaw);
+    $pageRaw = strip_tags($pageRaw);
+	$pageRaw = str_replace(array("\n", "\r"), "<br>", $pageRaw);
+	$pageRaw = str_replace('&nbsp;', ' ', $pageRaw);
+	$pageRaw = preg_replace('/\s+/', ' ', $pageRaw);
+
+    $separators = array("Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "");
+    $sepA = $separators[$dayOfWeek];
+    $sepB = $separators[$dayOfWeek+1];
+    preg_match('/.*' . $sepA . '.*<br><br> <br><br>(.*)<br><br> <br><br>.*' . $sepB . '.*/', $pageRaw, $menuDirty);
+
+    $menuClean = $menuDirty[1];
+
+    // Clean prices and weights
+    $menuClean = preg_replace('/\d+g<br>/', "", $menuClean);
+    // Collapse newlines
+    $menuClean = preg_replace('/<br>(<br>|\s)+/', "<br>", $menuClean);
+    // Drop prices
+    $menuClean = preg_replace('/(<br>|\d|\.)(,|\.)-/', "\n", $menuClean);
+    // Remove leading <br>s
+    $menuClean = preg_replace('/<br>/', "", $menuClean);
+    // Remove grs
+    $menuClean = preg_replace('/gr/', "", $menuClean);
+    // Drop digits
+    $menuClean = preg_replace('/\d(\d|,)*/', "", $menuClean);
+    // Drop leading space
+    $menuClean = preg_replace('/^[^a-zA-Z]+/', "", $menuClean);
+    $menuClean = preg_replace('/\n[^a-zA-Z]+/', "\n", $menuClean);
+
+    return $menuClean;
+}
+
 function ferdinanda() {
     $pageRaw = file_get_contents("http://www.ferdinanda.cz/cs/mala-strana/menu/denni-menu/main.html?ajax=1");
     $pageRaw = strip_tags($pageRaw);
@@ -101,7 +138,7 @@ function hamu() {
     $pageRaw = file_get_contents("https://www.hamu.cz/cs/vse-o-fakulte/fakultni-kavarna/");
 	$dom = new DomDocument();
     // The web is missing encoding header, so appends it manually.
-    $dom->loadHTML('<?xml encoding="utf-8" ? >' .  $pageRaw);
+    @$dom->loadHTML('<?xml encoding="utf-8" ? >' .  $pageRaw);
 	$finder = new DomXPath($dom);
 	$classname="wysiwyg";
 	$nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
@@ -139,8 +176,8 @@ include 'counter.php';
 
 $places = array(
     array(
-        'func' => 'anantasea',
-        'name' => 'Anantasea',
+        'func' => 'ananta',
+        'name' => 'Ananta',
         'href' => 'http://www.anantasesa.cz/tydenni-menu',
     ),
     array(
