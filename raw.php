@@ -39,11 +39,12 @@ function natureza() {
     // echo $pageRaw and see what the current situation looks like.
     // -zouharvi 23 Aug 2019
 
-    $separators = array("Pondělí, \d+ [^\s]+", "Úterý, \d+ [^\s]+", "Středa, \d+ [^\s]+", "Čtvrtek, \d+ [^\s]+", "Pátek, \d+ [^\s]+", "<br>D<br>");
+    $separators = array("Pondělí, \d+ [^\s]+", "Úterý, \d+ [^\s]+", "Středa, \d+ [^\s]+", "Čtvrtek, \d+ [^\s]+", "Pátek, \d+ [^\s]+", "D<br>");
     $sepA = $separators[$dayOfWeek];
     $sepB = $separators[$dayOfWeek+1];
-    preg_match('/.*' . $sepA . ' <br>(.*)<br> ' . $sepB . '.*/', $pageRaw, $menuDirty);
+    preg_match('/.*' . $sepA . ' <br>(.*)<br>' . $sepB . '.*/', $pageRaw, $menuDirty);
     $menuClean = preg_replace('/<br>/', "\n", $menuDirty[1]);
+
     return $menuClean;
 }
 
