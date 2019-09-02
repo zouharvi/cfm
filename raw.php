@@ -42,10 +42,20 @@ function natureza() {
     $separators = array("Pondělí, \d+ [^\s]+", "Úterý, \d+ [^\s]+", "Středa, \d+ [^\s]+", "Čtvrtek, \d+ [^\s]+", "Pátek, \d+ [^\s]+", "D<br>");
     $sepA = $separators[$dayOfWeek];
     $sepB = $separators[$dayOfWeek+1];
-    preg_match('/.*' . $sepA . ' <br>(.*)<br>' . $sepB . '.*/', $pageRaw, $menuDirty);
-    $menuClean = preg_replace('/<br>/', "\n", $menuDirty[1]);
-
-    return $menuClean;
+    preg_match('/.*' . $sepA . '(\s|<br>)+(.*)<br>\s*' . $sepB . '.*/', $pageRaw, $menuDirty);
+    $menuClean = preg_replace("/(<br>|\s|&nbsp;)+<br>/", "<br>", $menuDirty[2]);
+    $menuClean = preg_replace("/<br>/", "\n", $menuClean);
+    $menuClean = preg_replace("/[\n]+/", "\n", $menuClean);
+    
+    // Tmp hack to drop empty lines full of random white characters, \s does not match them
+    $tmp = explode("\n", $menuClean);
+    $result = '';
+    foreach($tmp as $i) {
+        if (strlen($i) < 150) {
+            $result = $result . "\n" . $i;
+        }
+    }
+    return $result;
 }
 
 function profdum() {
@@ -202,7 +212,6 @@ $places = array(
         'href' => 'https://www.hamu.cz/cs/vse-o-fakulte/fakultni-kavarna/',
     ),
 );
-
 $response = array();
 foreach($places as $placeArr) {
     try {
@@ -216,6 +225,5 @@ foreach($places as $placeArr) {
         'menu' => $menu,
     );
 } 
-
 //print_r($response);
 ?>
