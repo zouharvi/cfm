@@ -25,7 +25,8 @@ function ananta() {
     return $menu;
 }
 
-function natureza() {
+// deprecated
+function natureza_plain() {
     global $dayOfWeek;
 
     $childIndex = array(1, 4, 7, 10, 13)[$dayOfWeek];
@@ -57,6 +58,35 @@ function natureza() {
     }
     return $result;
 }
+
+function natureza() {
+    $key = file_get_contents('zomato.key');
+    $key = preg_replace('/\n$/', '', $key);
+
+    $opts = [
+        "http" => [
+            "method" => "GET",
+            "header" => "Accept: application/json\r\n" .
+                        "user_key: " . $key
+        ]
+    ];
+    $context = stream_context_create($opts);
+
+    $menuJSON = file_get_contents("https://developers.zomato.com/api/v2.1/dailymenu?res_id=16507635", false, $context); 
+    $menu = json_decode($menuJSON)->daily_menus;
+    if (count($menu) < 1) {
+        return 'Not available';
+    }
+    $menu = $menu[0]->daily_menu->dishes;
+    $dishes = array();
+    foreach($menu as $dish) {
+        $food = $dish->dish->name;
+        $food = preg_replace('/\d\d+/', '', $food);
+        array_push($dishes, $food);  
+    }
+    return implode("\n", $dishes);
+}
+
 
 function profdum() {
     /* Zomato requires API key, so here it is. This is actually quite sane were it not for the auth key
@@ -92,6 +122,7 @@ function profdum() {
 
 function profdum_plain() {
     // Broken for days other than mondays
+    // not used anyway, since Zomato is somewhat more reliable
     global $dayOfWeek;
     
     $pageRaw = file_get_contents("http://www.ms.mff.cuni.cz/profdum/jidelnicek.htm");
@@ -183,6 +214,24 @@ function hamu() {
     return $menuClean;
 }
 
+function menza_prava() {
+    global $dayOfWeek;
+    // This may get broken soon. I don't know how to choose the lawyer's menza explicitly 
+    $pageRaw = file_get_contents("https://kamweb.ruk.cuni.cz/webkredit/ZalozkaObjednavani.aspx");
+	$dom = new DomDocument();
+    // The web is missing encoding header, so appends it manually.
+    @$dom->loadHTML('<?xml encoding="utf-8" ? >' .  $pageRaw);
+    $alternatives = array(5, 7, 9, 11, 13, 15, 17); 
+    $menu = array();
+    foreach($alternatives as $alternative) {
+        $menuEl = $dom->getElementById('Jidelnicek1_AlternativaTxt' . $alternative);
+        if (isset($menuEl)) {
+            array_push($menu, $menuEl->textContent);
+        }
+    } 
+    return implode("\n", $menu);
+}
+
 include 'counter.php';
 
 $places = array(
@@ -210,6 +259,11 @@ $places = array(
         'func' => 'hamu',
         'name' => 'Hamu',
         'href' => 'https://www.hamu.cz/cs/vse-o-fakulte/fakultni-kavarna/',
+    ),
+    array(
+        'func' => 'menza_prava',
+        'name' => 'Právnická fakulta',
+        'href' => 'https://kamweb.ruk.cuni.cz/webkredit/',
     ),
 );
 $response = array();
