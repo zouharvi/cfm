@@ -5,13 +5,13 @@
  * -zouharvi Aug 25 2019
  */
 $dayOfWeek = (date('w')-1 + 7) % 7;
-$isWeekend = ($dayOfWeek > 5);
+$isWeekend = ($dayOfWeek > 4);
 $dayOfWeek = min($dayOfWeek, 4);
 
-function get($url, bool $use_include_path = FALSE, $context = NULL) {
-    $cachePrefix = 'cache/'; // TODO: cache storage should be probably elsewhere (not accessible over HTTP)
+function getURL($url, bool $use_include_path = FALSE, $context = NULL) {
+    $cachePrefix = 'cache/'; // cache/ is expected to be hidden with .htaccess
     $fname = $cachePrefix . preg_replace("/[^a-zA-Z0-9]/", "_", $url);
-    $maxAge = 5 * 60; // 5 minutes
+    $maxAge = 1 * 60; // 1 minute
 
     // Is it cached and recent?
     if (file_exists($fname) && filemtime($fname) + $maxAge > time()) {
@@ -33,7 +33,7 @@ function ananta() {
 
     $childIndex = array(1, 4, 7, 10, 13)[$dayOfWeek];
     $page = new DOMDocument();
-    $pageRaw = get('http://www.anantasesa.cz/tydenni-menu');
+    $pageRaw = getURL('http://www.anantasesa.cz/tydenni-menu');
     // Sanitize HTML
     $pageRaw = str_replace(array("\r", "\n"), '', $pageRaw);
     @$page->loadHTML($pageRaw);
@@ -50,7 +50,7 @@ function natureza_plain() {
 
     $childIndex = array(1, 4, 7, 10, 13)[$dayOfWeek];
     $page = new DOMDocument();
-    $pageRaw = get('https://naturezaveget.cz/cs/o-nas');
+    $pageRaw = getURL('https://naturezaveget.cz/cs/o-nas');
     $pageRaw = strip_tags($pageRaw);
     $pageRaw = str_replace(array("\n", "\r", "\t"), '<br>', $pageRaw);
     $pageRaw = preg_replace('/(<br>)+/', "<br>", $pageRaw);
@@ -91,7 +91,7 @@ function natureza() {
     ];
     $context = stream_context_create($opts);
 
-    $menuJSON = get("https://developers.zomato.com/api/v2.1/dailymenu?res_id=16507635", false, $context); 
+    $menuJSON = getURL("https://developers.zomato.com/api/v2.1/dailymenu?res_id=16507635", false, $context); 
     $menu = json_decode($menuJSON)->daily_menus;
     if (count($menu) < 1) {
         return 'Not available';
@@ -124,7 +124,7 @@ function profdum() {
     ];
     $context = stream_context_create($opts);
 
-    $menuJSON = get("https://developers.zomato.com/api/v2.1/dailymenu?res_id=16506988", false, $context); 
+    $menuJSON = getURL("https://developers.zomato.com/api/v2.1/dailymenu?res_id=16506988", false, $context); 
     $menu = json_decode($menuJSON)->daily_menus;
     if (count($menu) < 1) {
         return 'Not available';
@@ -144,7 +144,7 @@ function profdum_plain() {
     // not used anyway, since Zomato is somewhat more reliable
     global $dayOfWeek;
     
-    $pageRaw = get("http://www.ms.mff.cuni.cz/profdum/jidelnicek.htm");
+    $pageRaw = getURL("http://www.ms.mff.cuni.cz/profdum/jidelnicek.htm");
     $pageRaw = iconv('windows-1250', 'utf-8', $pageRaw);
     $pageRaw = strip_tags($pageRaw);
 	$pageRaw = str_replace(array("\n", "\r"), "<br>", $pageRaw);
@@ -178,7 +178,7 @@ function profdum_plain() {
 }
 
 function ferdinanda() {
-    $pageRaw = get("http://www.ferdinanda.cz/cs/mala-strana/menu/denni-menu/main.html?ajax=1");
+    $pageRaw = getURL("http://www.ferdinanda.cz/cs/mala-strana/menu/denni-menu/main.html?ajax=1");
     $pageRaw = strip_tags($pageRaw);
     preg_match('/HLAVNÍ JÍDLA(.*)SALÁTY/', $pageRaw, $mainClean);
     $mainClean = $mainClean[1];
@@ -196,16 +196,16 @@ function ferdinanda() {
 function hamu() {
     global $dayOfWeek;
     
-    $pageRaw = get("https://www.hamu.cz/cs/vse-o-fakulte/fakultni-kavarna/");
+    $pageRaw = getURL("https://www.hamu.cz/cs/vse-o-fakulte/fakultni-kavarna/");
 	$dom = new DomDocument();
     // The web is missing encoding header, so appends it manually.
     @$dom->loadHTML('<?xml encoding="utf-8" ? >' .  $pageRaw);
-	$finder = new DomXPath($dom);
-	$classname="wysiwyg";
-	$nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+    $finder = new DomXPath($dom);
+    $classname="wysiwyg";
+    $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
     
-	$pageRaw = strip_tags($dom->saveHTML($nodes[0]));
-	$pageRaw =str_replace(array("\n", "\r"), "<br>", $pageRaw);
+    $pageRaw = strip_tags($dom->saveHTML($nodes[0]));
+    $pageRaw =str_replace(array("\n", "\r"), "<br>", $pageRaw);
 
     $separators = array("Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "");
     $sepA = $separators[$dayOfWeek];
@@ -236,16 +236,15 @@ function hamu() {
 function carmelita() {
     global $dayOfWeek;
     
-    $pageRaw = get("http://www.restauracecarmelita.cz/poledni-nabidka-1/");
+    $pageRaw = getURL("http://www.restauracecarmelita.cz/poledni-nabidka-1/");
 	$dom = new DomDocument();
     // The web is missing encoding header, so appends it manually.
     @$dom->loadHTML('<?xml encoding="utf-8" ? >' .  $pageRaw);
-	$finder = new DomXPath($dom);
-	$nodes = $finder->query("//div[@id='content']");
-    
+    $finder = new DomXPath($dom);
+    $nodes = $finder->query("//div[@id='content']");
 
-	$pageRaw = strip_tags($dom->saveHTML($nodes[0]));
-	$pageRaw = str_replace(array("\n", "\r"), "<br>", $pageRaw);
+    $pageRaw = strip_tags($dom->saveHTML($nodes[0]));
+    $pageRaw = str_replace(array("\n", "\r"), "<br>", $pageRaw);
 
     $separators = array("Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "");
     $sepA = $separators[$dayOfWeek];
@@ -275,22 +274,22 @@ function cantina() {
     $baseURL = "http://www.restauracecantina.cz";
 
     // Get the daily menu link from the website menu Cantina changes the link (almost?) every week
-    $pageRaw = get($baseURL . "/lang/en/");
+    $pageRaw = getURL($baseURL . "/lang/en/");
 	$dom = new DomDocument();
     // The web is missing encoding header, so appends it manually.
     @$dom->loadHTML('<?xml encoding="utf-8" ?>' .  $pageRaw);
-	$finder = new DomXPath($dom);
-	$nodes = $finder->query("//span[contains(normalize-space(),'Daily offer')]/..");
+    $finder = new DomXPath($dom);
+    $nodes = $finder->query("//span[contains(normalize-space(),'Daily offer')]/..");
     
     $menuURL = $nodes[0]->getAttribute('href');
 
     // Get the daily/weekly menu
-    $pageRaw = get($baseURL . $menuURL);
+    $pageRaw = getURL($baseURL . $menuURL);
 
     $dom = new DomDocument();
     // The web is missing encoding header, so appends it manually.
     @$dom->loadHTML('<?xml encoding="utf-8" ?>' .  $pageRaw);
-	$finder = new DomXPath($dom);
+    $finder = new DomXPath($dom);
     $nodes = $finder->query("//div[@id='content']");
     
     // (the menu contains only UPPERCASE, which looks ugly)
@@ -334,8 +333,8 @@ function cantina() {
 function menza_prava() {
     global $dayOfWeek;
     // This may get broken soon. I don't know how to choose the lawyer's menza explicitly 
-    $pageRaw = get("https://kamweb.ruk.cuni.cz/webkredit/ZalozkaObjednavani.aspx");
-	$dom = new DomDocument();
+    $pageRaw = getURL("https://kamweb.ruk.cuni.cz/webkredit/ZalozkaObjednavani.aspx");
+    $dom = new DomDocument();
     // The web is missing encoding header, so appends it manually.
     @$dom->loadHTML('<?xml encoding="utf-8" ? >' .  $pageRaw);
     $alternatives = array(5, 7, 9, 11, 13, 15, 17); 
