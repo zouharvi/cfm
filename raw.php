@@ -243,7 +243,7 @@ $places = array(
     array(
         'func' => 'natureza',
         'name' => 'Natureza',
-        'href' => 'http://naturezaveget.cz',
+        'href' => 'https://naturezaveget.cz/cs/dmenu',
     ),
     array(
         'func' => 'profdum',
@@ -270,6 +270,9 @@ $response = array();
 foreach($places as $placeArr) {
     try {
         $menu = $placeArr['func']();
+        if (strlen($menu) <= 5) {
+            throw new Exception('Nothing to eat');
+        }
     } catch(Exception $e) {
         $menu = 'Not available';
     }

@@ -1,7 +1,7 @@
 # Call For Menza
 [cfm.vilda.net](https://cfm.vilda.net)
 
-CfM fetches daily menus of places we usually frequent. This page saves me about 15s every day.
+CfM fetches daily menus of places around Malá strana we usually frequent. This page saves me about 15s every day.
 
 ## Requirements
 `php, php-cli, php-common, php-fpm, php-json, php-xml` version `>=7.3.0` should be enough.
