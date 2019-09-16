@@ -5,3 +5,6 @@ RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 
 RewriteCond %{HTTPS} off [NC]
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,QSA]
+
+RewriteRule (^|/)cache(/|$) - [F]
+RewriteRule (^|/)logs(/|$) - [F]
