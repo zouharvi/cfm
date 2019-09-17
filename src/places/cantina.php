@@ -42,7 +42,7 @@ function cantina() {
     $separators = array("Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "");
     $sepA = $separators[$dayOfWeek];
     $sepB = $separators[$dayOfWeek+1];
-    preg_match('/.*' . $sepA . '(.*)' . $sepB . '.*/', $pageRaw, $menuDirty);
+    preg_match('/.*' . $sepA . '(.*)' . $sepB . '.*/i', $pageRaw, $menuDirty);
     
     $menuClean = $menuDirty[1];
     
