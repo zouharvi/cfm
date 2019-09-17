@@ -13,7 +13,7 @@
 <body style='background-color: #f4f4f4'>
     <h1>Call for Menza</h2>
     <?php
-    include 'raw.php';
+    include 'src/raw.php';
     
     if ($isWeekend) {
         echo "<p>It's weekend now, so I'm showing last available lunch menus.</p>";
