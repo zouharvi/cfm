@@ -23,7 +23,7 @@ function carmelita() {
     $menuClean = preg_replace('/\d+\.\d+\./', "", $menuClean);
 
     // Remove order ("1.", "2.", ...)
-    $menuClean = preg_replace('/\d\. /', "", $menuClean);
+    $menuClean = preg_replace('/\d\. ?/', "", $menuClean);
     // Clean prices
     $menuClean = preg_replace('/\d+,- Kč<br>/', "", $menuClean);
     $menuClean = preg_replace('/\d+g/', "", $menuClean);
@@ -31,7 +31,8 @@ function carmelita() {
     $menuClean = preg_replace('/<br>(<br>|\s)+/', "<br>", $menuClean);
     // Drop leading whitespace
     $menuClean = preg_replace('/^ *<br>/', "", $menuClean);
-
+    // Remove footer
+    $menuClean = preg_replace('/K polednimu menu nabízíme.*/iu', "", $menuClean);
     return $menuClean;
 }
 
