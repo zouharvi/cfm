@@ -42,7 +42,7 @@ function cantina() {
     $separators = array("Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "");
     $sepA = $separators[$dayOfWeek];
     $sepB = $separators[$dayOfWeek+1];
-    preg_match('/.*' . $sepA . '(.*)' . $sepB . '.*/i', $pageRaw, $menuDirty);
+    preg_match('/.*' . $sepA . '(.*)' . $sepB . '.*/iu', $pageRaw, $menuDirty);
     
     $menuClean = $menuDirty[1];
     
@@ -51,13 +51,15 @@ function cantina() {
     // Remove order ("1.", "2.", ...)
     $menuClean = preg_replace('/\d\. /', "", $menuClean);
     // Clean prices
-    $menuClean = preg_replace('/\d+,- Kč<br>/', "", $menuClean);
+    $menuClean = preg_replace('/\d+,- Kč<br>/iu', "", $menuClean);
     // Remove weight
     $menuClean = preg_replace('/\d+[gG]/', "", $menuClean);
     // Collapse newlines
     $menuClean = preg_replace('/<br>(<br>|\s)+/', "<br>", $menuClean);
     // Drop leading whitespace
     $menuClean = preg_replace('/^ *<br>/', "", $menuClean);
+    // Remove footer
+    $menuClean = preg_replace('/Informace o obsažených alergenech.*/iu', "", $menuClean);
 
     return $menuClean;
 }
