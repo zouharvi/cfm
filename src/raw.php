@@ -84,7 +84,7 @@ foreach($places as $placeArr) {
         if (strlen($menu) <= 5) {
             throw new Exception('Nothing to eat');
         }
-    } catch(Exception $e) {
+    } catch(Throwable $t) {
         $menu = 'Not available';
     }
     $response[$placeArr['func']] = array(
