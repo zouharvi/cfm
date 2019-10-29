@@ -11,8 +11,8 @@ function cantina() {
     // The web is missing encoding header, so appends it manually.
     @$dom->loadHTML('<?xml encoding="utf-8" ?>' .  $pageRaw);
     $finder = new DomXPath($dom);
-    $nodes = $finder->query("//span[contains(normalize-space(),'Daily offer')]/..");
-    
+    $nodes = $finder->query("//span[contains(normalize-space(),'Daily offer')]/.. | //span[contains(normalize-space(),'POLEDNÍ MENU')]/..");
+
     if (is_null($nodes[0])) {
         throw new Exception("'Daily menu' menu entry not found");
     }
@@ -51,7 +51,7 @@ function cantina() {
     $menuClean = $menuDirty[1];
     
     // Remove the date
-    $menuClean = preg_replace('/\d+\.\d+\./', "", $menuClean);
+    $menuClean = preg_replace('/\d+\. *\d+\./', "", $menuClean);
     // Remove order ("1.", "2.", ...)
     $menuClean = preg_replace('/\d\. /', "", $menuClean);
     // Clean prices
