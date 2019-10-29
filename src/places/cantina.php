@@ -13,6 +13,10 @@ function cantina() {
     $finder = new DomXPath($dom);
     $nodes = $finder->query("//span[contains(normalize-space(),'Daily offer')]/..");
     
+    if (is_null($nodes[0])) {
+        throw new Exception("'Daily menu' menu entry not found");
+    }
+
     $menuURL = $nodes[0]->getAttribute('href');
 
     // Get the daily/weekly menu
