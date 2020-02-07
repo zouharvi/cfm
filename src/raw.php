@@ -67,6 +67,11 @@ $places = array(
         'href' => 'https://kamweb.ruk.cuni.cz/webkredit/',
     ),
     array(
+        'func' => 'menza_arnost',
+        'name' => 'Arnošta z Pardubic',
+        'href' => 'https://kamweb.ruk.cuni.cz/webkredit/',
+    ),
+    array(
         'func' => 'carmelita',
         'name' => 'Carmelita',
         'href' => 'http://www.restauracecarmelita.cz/',
