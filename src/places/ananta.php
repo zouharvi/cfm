@@ -3,16 +3,21 @@ function ananta() {
     // ananta could follow suit of natureza (strip tags, lots of greps)
     global $dayOfWeek;
 
-    $childIndex = array(1, 4, 7, 10, 13)[$dayOfWeek];
+    $separators = array("PONDĚLÍ", "ÚTERÝ", "STŘEDA", "ČTVRTEK", "PÁTEK", "Menu");
+    $sepA = $separators[$dayOfWeek];
+    $sepB = $separators[$dayOfWeek+1];
+
     $page = new DOMDocument();
     $pageRaw = getURL('http://www.anantasesa.cz/tydenni-menu');
     // Sanitize HTML
     $pageRaw = str_replace(array("\r", "\n"), '', $pageRaw);
     @$page->loadHTML($pageRaw);
-    $content = $page->getElementById('content');
+    $content = $page->getElementById('content')->C14N();
 
-    $menu = $content->childNodes->item($childIndex)->C14N();
-    $menu = str_replace(array("<br></br>", "<p>", "</p>"), array("\n", "", ""), $menu);
-    return $menu;
+    preg_match('/.*' . $sepA . '<\/h2>(.*)' . $sepB . '.*/', $content, $menuDirty);
+    $menuClean = $menuDirty[1];
+    $menuClean = preg_replace('/<\/p><p>/', "<br>", $menuClean);
+    $menuClean = preg_replace('/(<p>|<\/p>)/', "", $menuClean);
+    return $menuClean;
 }
 ?>
