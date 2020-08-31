@@ -3,7 +3,7 @@ function menza_arnost() {
     global $dayOfWeek;
     
     $pageRaw = file_get_contents(
-        "https://kamweb.ruk.cuni.cz/webkredit/Api/Ordering/Menu?Dates=" . date("Y") . "-" . date("m") . "-" . date("d") . "&CanteenId=5"
+        "https://kamweb.ruk.cuni.cz/webkredit/Api/Ordering/Menu?Dates=" . date("Y-m-d") . "&CanteenId=5"
     );
     $obj = json_decode($pageRaw);
     $out = "";
