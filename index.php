@@ -26,6 +26,13 @@
     }
     ?>
 
-    <h5><a href='https://github.com/zouharvi/cfm'>About</a></h5>
+    <br>
+    <div>
+        Made by Vilda with the help of others from MS.
+    </div>
+    
+    <div style='font-weight: bold;'>
+        <a href="https://github.com/zouharvi/cfm">About/GitHub</a>, <a href="statistics.php">Statistics</a>
+    </div>
 </body>
 </html>
