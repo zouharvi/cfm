@@ -44,7 +44,7 @@ $places = array(
     array(
         'func' => 'natureza',
         'name' => 'Natureza',
-        'href' => 'https://naturezaveget.cz/cs/dmenu',
+        'href' => 'https://naturezaveget.cz/poledni-menu/noonmenu/7/1',
     ),
     array(
         'func' => 'profdum',

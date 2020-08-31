@@ -18,6 +18,8 @@ function ananta() {
     $menuClean = $menuDirty[1];
     $menuClean = preg_replace('/<\/p><p>/', "<br>", $menuClean);
     $menuClean = preg_replace('/(<p>|<\/p>)/', "", $menuClean);
+    $menuClean = preg_replace('/<br></br>/', "<br>", $menuClean);
+
     return $menuClean;
 }
 ?>

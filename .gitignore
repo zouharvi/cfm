@@ -1,3 +1,4 @@
 zomato.key
 logs/*
 *.swp
+cache/*
