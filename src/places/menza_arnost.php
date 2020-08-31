@@ -1,28 +1,27 @@
 <?php
 function menza_arnost() {
     global $dayOfWeek;
-    $pageRaw = file_get_contents("https://kamweb.ruk.cuni.cz/WebKredit/rss?canteenId=5&language=Cz");
     
-    $state = 0;
-    $out = '';
-    foreach(preg_split("/((\r?\n)|(\r\n?))/", $pageRaw) as $line){
-        // do stuff with $line
-        if($state == 0 & strpos($line, "Menu") !== false) {
-            $state = 1;
-            continue;
+    $pageRaw = file_get_contents(
+        "https://kamweb.ruk.cuni.cz/webkredit/Api/Ordering/Menu?Dates=" . date("Y") . "-" . date("m") . "-" . date("d") . "&CanteenId=5"
+    );
+    $obj = json_decode($pageRaw);
+    $out = "";
+    
+    $outArr = array();
+
+    foreach($obj->groups[1]->rows as $group) {
+        $mealName = $group->item->mealName;
+        $price = $group->item->price;
+        $available = $group->item->countAvailable;
+        
+        if(strpos(strtolower($mealName), "vegan") !== false) {
+            $mealName = $mealName . " 🌿";
         }
-        if($state == 1) {
-            if(strpos($line, "Bageta") !== false || strpos($line, "updated") !== false) {
-                $state = 2;
-                break;
-            } else {
-                $out = $out . $line;
-            }
-        }
-    } 
-    $out = str_replace(array("&", "gt", "lt", "h2", ";", "/", "ul"), '', $out);
-    $out = preg_replace("/li\s*li/", "<br>", $out);
-    $out = preg_replace("/\s+li/", '', $out);
+        array_push($outArr, $mealName . " (" . $available . ' left, ' . $price . " Kč)");
+    }
+    $out = implode("<br>", $outArr);
+
     return $out;
 }
 ?>

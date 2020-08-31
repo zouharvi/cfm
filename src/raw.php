@@ -38,28 +38,18 @@ include 'counter.php';
 $places = array(
     array(
         'func' => 'ananta',
-        'name' => 'Ananta',
+        'name' => 'Ananta 🌿',
         'href' => 'http://www.anantasesa.cz/tydenni-menu',
     ),
     array(
         'func' => 'natureza',
-        'name' => 'Natureza',
+        'name' => 'Natureza 🌿',
         'href' => 'https://naturezaveget.cz/poledni-menu/noonmenu/7/1',
     ),
     array(
         'func' => 'profdum',
         'name' => 'Profesní dům',
         'href' => 'https://www.profesnidum.cz/daily-menu.htm',
-    ),
-    array(
-        'func' => 'ferdinanda',
-        'name' => 'Ferdinanda',
-        'href' => 'http://ferdinanda.cz/cs/mala-strana/menu/denni-menu',
-    ),
-    array(
-        'func' => 'hamu',
-        'name' => 'Hamu',
-        'href' => 'https://www.hamu.cz/cs/vse-o-fakulte/fakultni-kavarna/',
     ),
     array(
         'func' => 'menza_prava',
@@ -70,6 +60,16 @@ $places = array(
         'func' => 'menza_arnost',
         'name' => 'Arnošta z Pardubic',
         'href' => 'https://kamweb.ruk.cuni.cz/webkredit/',
+    ),
+    array(
+        'func' => 'ferdinanda',
+        'name' => 'Ferdinanda',
+        'href' => 'http://ferdinanda.cz/cs/mala-strana/menu/denni-menu',
+    ),
+    array(
+        'func' => 'hamu',
+        'name' => 'Hamu',
+        'href' => 'https://www.hamu.cz/cs/vse-o-fakulte/fakultni-kavarna/',
     ),
     array(
         'func' => 'carmelita',
