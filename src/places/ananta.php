@@ -20,6 +20,7 @@ function ananta() {
     $menuClean = preg_replace('/(<p>|<\/p>)/', "", $menuClean);
     $menuClean = preg_replace('/<\/?h\d>/', "", $menuClean);
     $menuClean = preg_replace('/<br><\/br>/', "<br>", $menuClean);
+    $menuClean = preg_replace('/Jogurt<br>/', "Jogurt", $menuClean);
 
     return $menuClean;
 }
