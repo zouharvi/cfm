@@ -11,7 +11,7 @@
 </head>
 
 <body style='background-color: #f4f4f4'>
-    <h1>Call for Menza</h2>
+    <h1>Call for Menza</h1>
     <?php
     include 'src/raw.php';
     
